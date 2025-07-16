@@ -64,14 +64,11 @@ class APKDecompiler:
         """Extract basic metadata from APK file."""
         try:
             with zipfile.ZipFile(apk_path, 'r') as apk_zip:
-                # Extract AndroidManifest.xml
-                manifest_data = apk_zip.read('AndroidManifest.xml')
-                
-                # Parse manifest (basic parsing)
-                manifest_info = self._parse_manifest(manifest_data)
-                
                 # Get file list
                 file_list = apk_zip.namelist()
+                
+                # Try to extract manifest info using apktool for proper decoding
+                manifest_info = self._extract_manifest_with_apktool(apk_path)
                 
                 return {
                     'file_size': os.path.getsize(apk_path),
@@ -83,12 +80,80 @@ class APKDecompiler:
             self.logger.error(f"Error extracting metadata: {str(e)}")
             return {'error': str(e)}
     
-    def _parse_manifest(self, manifest_data: bytes) -> Dict:
-        """Parse AndroidManifest.xml to extract basic info."""
+    def _extract_manifest_with_apktool(self, apk_path: str) -> Dict:
+        """Extract manifest information using apktool for proper AXML decoding."""
         try:
-            # This is a simplified parser - in production you'd want a proper AXML parser
-            manifest_text = manifest_data.decode('utf-8', errors='ignore')
+            # Create temporary directory for apktool output
+            import tempfile
+            temp_dir = tempfile.mkdtemp()
             
+            # Use apktool to decode the APK
+            cmd = [
+                self.config.APKTOOL_PATH,
+                'd',  # decode
+                apk_path,
+                '-o',  # output
+                temp_dir,
+                '-f'   # force overwrite
+            ]
+            
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=self.config.JOB_TIMEOUT
+            )
+            
+            if result.returncode == 0:
+                # Read the decoded AndroidManifest.xml
+                manifest_path = os.path.join(temp_dir, 'AndroidManifest.xml')
+                if os.path.exists(manifest_path):
+                    with open(manifest_path, 'r', encoding='utf-8') as f:
+                        manifest_text = f.read()
+                    
+                    # Parse the decoded manifest
+                    manifest_info = self._parse_decoded_manifest(manifest_text)
+                    
+                    # Cleanup
+                    import shutil
+                    shutil.rmtree(temp_dir)
+                    
+                    return manifest_info
+            
+            # Cleanup on failure
+            import shutil
+            shutil.rmtree(temp_dir)
+            
+            # Fallback to basic extraction
+            return self._extract_basic_manifest(apk_path)
+            
+        except Exception as e:
+            self.logger.error(f"Error extracting manifest with apktool: {str(e)}")
+            # Fallback to basic extraction
+            return self._extract_basic_manifest(apk_path)
+    
+    def _extract_basic_manifest(self, apk_path: str) -> Dict:
+        """Fallback method to extract basic manifest info."""
+        try:
+            with zipfile.ZipFile(apk_path, 'r') as apk_zip:
+                if 'AndroidManifest.xml' in apk_zip.namelist():
+                    manifest_data = apk_zip.read('AndroidManifest.xml')
+                    manifest_text = manifest_data.decode('utf-8', errors='ignore')
+                    return self._parse_decoded_manifest(manifest_text)
+        except Exception as e:
+            self.logger.error(f"Error in basic manifest extraction: {str(e)}")
+        
+        return {
+            'package_name': 'Unknown',
+            'version_code': 'Unknown',
+            'version_name': 'Unknown',
+            'permissions': [],
+            'activities': []
+        }
+    
+    def _parse_decoded_manifest(self, manifest_text: str) -> Dict:
+        """Parse decoded AndroidManifest.xml to extract basic info."""
+        try:
             # Extract basic info using string operations
             info = {
                 'package_name': self._extract_package_name(manifest_text),
@@ -100,8 +165,14 @@ class APKDecompiler:
             
             return info
         except Exception as e:
-            self.logger.error(f"Error parsing manifest: {str(e)}")
-            return {'error': str(e)}
+            self.logger.error(f"Error parsing decoded manifest: {str(e)}")
+            return {
+                'package_name': 'Unknown',
+                'version_code': 'Unknown',
+                'version_name': 'Unknown',
+                'permissions': [],
+                'activities': []
+            }
     
     def _extract_package_name(self, manifest_text: str) -> str:
         """Extract package name from manifest."""
