@@ -30,7 +30,7 @@ cd HeyJava
 ### 2. Install Python Dependencies
 
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ### 3. Install Required Tools
@@ -38,7 +38,7 @@ pip install -r requirements.txt
 The system requires three main tools for APK decompilation:
 
 ```bash
-python install_tools.py
+python3 install_tools.py
 ```
 
 This will install:
@@ -66,7 +66,7 @@ d2j-dex2jar.sh --help
 Decompile an APK file with all available tools:
 
 ```bash
-python cli_decompiler.py decompile app.apk -o output_directory
+python3 cli_decompiler.py decompile app.apk -o output_directory
 ```
 
 #### 2. Extract APK Information Only
@@ -74,7 +74,7 @@ python cli_decompiler.py decompile app.apk -o output_directory
 Get detailed information about an APK without decompiling:
 
 ```bash
-python cli_decompiler.py info app.apk
+python3 cli_decompiler.py info app.apk
 ```
 
 #### 3. Extract Specific Components
@@ -82,25 +82,25 @@ python cli_decompiler.py info app.apk
 Extract only Java code:
 
 ```bash
-python cli_decompiler.py extract app.apk -o output_dir --java-only
+python3 cli_decompiler.py extract app.apk -o output_dir --java-only
 ```
 
 Extract only Smali code:
 
 ```bash
-python cli_decompiler.py extract app.apk -o output_dir --smali-only
+python3 cli_decompiler.py extract app.apk -o output_dir --smali-only
 ```
 
 Extract only resources:
 
 ```bash
-python cli_decompiler.py extract app.apk -o output_dir --resources-only
+python3 cli_decompiler.py extract app.apk -o output_dir --resources-only
 ```
 
 Extract only manifest:
 
 ```bash
-python cli_decompiler.py extract app.apk -o output_dir --manifest-only
+python3 cli_decompiler.py extract app.apk -o output_dir --manifest-only
 ```
 
 #### 4. Analyze Existing Decompiled Code
@@ -108,7 +108,7 @@ python cli_decompiler.py extract app.apk -o output_dir --manifest-only
 Analyze code that was previously decompiled:
 
 ```bash
-python cli_decompiler.py analyze output_directory
+python3 cli_decompiler.py analyze output_directory
 ```
 
 ### Advanced Options
@@ -118,7 +118,7 @@ python cli_decompiler.py analyze output_directory
 Get results in JSON format for programmatic processing:
 
 ```bash
-python cli_decompiler.py decompile app.apk -o output_dir --format json
+python3 cli_decompiler.py decompile app.apk -o output_dir --format json
 ```
 
 #### Verbose Output
@@ -126,7 +126,7 @@ python cli_decompiler.py decompile app.apk -o output_dir --format json
 Enable detailed logging:
 
 ```bash
-python cli_decompiler.py decompile app.apk -o output_dir -v
+python3 cli_decompiler.py decompile app.apk -o output_dir -v
 ```
 
 #### Selective Decompilation
@@ -134,46 +134,8 @@ python cli_decompiler.py decompile app.apk -o output_dir -v
 Skip JAR conversion:
 
 ```bash
-python cli_decompiler.py decompile app.apk -o output_dir --no-jar
+python3 cli_decompiler.py decompile app.apk -o output_dir --no-jar
 ```
-
-## Output Structure
-
-When you decompile an APK, the system creates the following directory structure:
-
-```
-output_directory/
-├── apktool_output/          # Smali code and resources
-│   ├── smali/               # Smali files
-│   ├── res/                 # Resources
-│   ├── AndroidManifest.xml  # Decoded manifest
-│   └── ...
-├── jadx_output/             # Java source code
-│   ├── sources/             # Java files
-│   └── ...
-├── output.jar               # Converted JAR file (if successful)
-└── analysis.json            # Analysis results
-```
-
-## Tool Details
-
-### apktool
-
-- **Purpose**: Extracts resources, Smali code, and decodes AndroidManifest.xml
-- **Output**: Human-readable Smali code and resources
-- **Use Case**: When you need to analyze the app's structure or modify resources
-
-### jadx
-
-- **Purpose**: Decompiles DEX files to Java source code
-- **Output**: Readable Java source code
-- **Use Case**: When you want to understand the app's logic and functionality
-
-### dex2jar
-
-- **Purpose**: Converts APK to JAR format
-- **Output**: JAR file that can be opened in Java IDEs
-- **Use Case**: When you want to analyze the app in Java development tools
 
 ## Examples
 
@@ -181,7 +143,7 @@ output_directory/
 
 ```bash
 # Get basic information about an APK
-python cli_decompiler.py info suspicious_app.apk --format text
+python3 cli_decompiler.py info suspicious_app.apk --format text
 ```
 
 Output:
@@ -214,7 +176,7 @@ APK INFORMATION
 
 ```bash
 # Decompile with all tools
-python cli_decompiler.py decompile app.apk -o decompiled_app
+python3 cli_decompiler.py decompile app.apk -o decompiled_app
 ```
 
 Output:
@@ -264,7 +226,7 @@ DECOMPILATION RESULTS
 
 ```bash
 # Extract only Java source code
-python cli_decompiler.py extract app.apk -o java_only --java-only
+python3 cli_decompiler.py extract app.apk -o java_only --java-only
 ```
 
 ## Troubleshooting
@@ -295,38 +257,6 @@ python cli_decompiler.py extract app.apk -o java_only --java-only
 
 The system creates detailed logs in `apk_decompiler.log`. Check this file for detailed error information:
 
-```bash
-tail -f apk_decompiler.log
-```
-
-## Security Considerations
-
-⚠️ **Important**: This tool is intended for legitimate security research, reverse engineering, and educational purposes only. Always ensure you have proper authorization before analyzing any APK files.
-
-- Only analyze APKs you own or have explicit permission to analyze
-- Respect intellectual property rights
-- Follow applicable laws and regulations
-- Use responsibly and ethically
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Support
-
-If you encounter issues or have questions:
-
-1. Check the troubleshooting section above
-2. Review the log files for detailed error information
-3. Open an issue on the project repository
-4. Ensure you're using the latest version of the tools
-
-## Advanced Usage
-
 ### Batch Processing
 
 For processing multiple APK files:
@@ -343,8 +273,5 @@ The JSON output format allows easy integration with other analysis tools:
 
 ```bash
 python cli_decompiler.py info app.apk --format json | jq '.manifest.permissions'
+``
 ```
-
-### Custom Analysis
-
-You can extend the analysis by modifying the `apk_decompiler.py` file to add custom analysis functions.
