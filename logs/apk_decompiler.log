@@ -1,0 +1,40 @@
+2025-07-16 13:59:43,082 - INFO - Extracting information from: /Users/prime/Apps/joey1.apk
+2025-07-16 14:01:01,962 - INFO - Extracting components from: /Users/prime/Apps/joey1.apk
+2025-07-16 14:01:01,963 - INFO - Extracting Java code...
+2025-07-16 14:01:15,366 - ERROR - Failed to extract Java code: 
+2025-07-16 14:05:32,209 - INFO - Extracting components from: /Users/prime/Apps/joey1.apk
+2025-07-16 14:05:32,209 - INFO - Extracting Java code...
+2025-07-16 14:05:32,209 - INFO - Running command: jadx -d java_only/java_code /Users/prime/Apps/joey1.apk
+2025-07-16 14:05:44,649 - ERROR - Failed to extract Java code.
+STDOUT:
+INFO  - loading ...
+INFO  - processing ...
+INFO  - progress: 0 of 2940 (0%)
+INFO  - progress: 924 of 2940 (31%)
+INFO  - progress: 1506 of 2940 (51%)
+INFO  - progress: 1507 of 2940 (51%)
+INFO  - progress: 1511 of 2940 (51%)
+INFO  - progress: 1520 of 2940 (51%)
+INFO  - progress: 1526 of 2940 (51%)
+INFO  - progress: 1610 of 2940 (54%)
+INFO  - progress: 1765 of 2940 (60%)
+INFO  - progress: 1929 of 2940 (65%)
+INFO  - progress: 2055 of 2940 (69%)
+INFO  - progress: 2208 of 2940 (75%)
+INFO  - progress: 2328 of 2940 (79%)
+INFO  - progress: 2513 of 2940 (85%)
+INFO  - progress: 2687 of 2940 (91%)
+INFO  - progress: 2882 of 2940 (98%)
+                                                             
+ERROR - finished with errors, count: 2
+
+STDERR:
+
+2025-07-16 14:07:11,421 - INFO - Extracting components from: /Users/prime/Apps/joey1.apk
+2025-07-16 14:07:11,421 - INFO - Extracting Java code...
+2025-07-16 14:07:11,421 - INFO - Running command: jadx -d java_only/java_code /Users/prime/Apps/joey1.apk
+2025-07-16 14:07:24,722 - INFO - Successfully extracted 2473 Java files to java_only/java_code
+2025-07-16 14:07:24,722 - WARNING - jadx finished with 1 errors, but 2473 Java files were extracted successfully
+2025-07-16 14:09:51,456 - INFO - Starting decompilation of: /Users/prime/Apps/joey1.apk
+2025-07-16 14:09:51,457 - INFO - Output directory: decompiled_app
+2025-07-16 14:10:08,111 - INFO - Decompilation completed successfully in 16.65 seconds
