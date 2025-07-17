@@ -8,10 +8,13 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 import logging
 
+from .snyk_scanner import SnykScanner
+
 class APKDecompiler:
     def __init__(self, config):
         self.config = config
         self.logger = logging.getLogger(__name__)
+        self.snyk_scanner = SnykScanner()
         
     def decompile_apk(self, apk_path: str, output_dir: str) -> Dict:
         """
@@ -43,6 +46,9 @@ class APKDecompiler:
             # Analyze the decompiled code
             analysis = self._analyze_decompiled_code(output_dir)
             
+            # Run Snyk security scan on Java code
+            snyk_result = self._run_snyk_scan(output_dir, apk_path)
+            
             return {
                 'success': True,
                 'metadata': metadata,
@@ -50,6 +56,7 @@ class APKDecompiler:
                 'jadx_output': jadx_output,
                 'jar_output': jar_output,
                 'analysis': analysis,
+                'snyk_scan': snyk_result,
                 'output_directory': output_dir
             }
             
@@ -425,4 +432,30 @@ class APKDecompiler:
                             'size': os.path.getsize(file_path)
                         })
         
-        return {'smali_files': smali_files} 
+        return {'smali_files': smali_files}
+    
+    def _run_snyk_scan(self, output_dir: str, apk_path: str) -> Dict:
+        """Run Snyk security scan on decompiled Java code."""
+        try:
+            # Use the sources directory for Snyk scan
+            jadx_dir = os.path.join(output_dir, 'jadx_output', 'sources')
+            
+            if not os.path.exists(jadx_dir):
+                return {
+                    'success': False,
+                    'error': 'No Java code found to scan'
+                }
+            
+            # Generate output filename based on APK name
+            apk_name = Path(apk_path).stem
+            snyk_report_file = os.path.join(output_dir, f"{apk_name}_snyk_scan.md")
+            
+            # Run Snyk scan
+            return self.snyk_scanner.scan_java_code(jadx_dir, snyk_report_file)
+            
+        except Exception as e:
+            self.logger.error(f"Error running Snyk scan: {str(e)}")
+            return {
+                'success': False,
+                'error': str(e)
+            } 

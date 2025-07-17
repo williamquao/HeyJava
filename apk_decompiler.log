@@ -1,0 +1,65 @@
+2025-07-16 17:37:36,106 - INFO - Starting decompilation of: /Users/prime/Apps/joey1.apk
+2025-07-16 17:37:36,106 - INFO - Output directory: decompiled_app
+2025-07-16 17:37:56,610 - INFO - Starting Snyk code scan of: decompiled_app/jadx_output
+2025-07-16 17:37:59,966 - INFO - Running Snyk command: snyk code test --json
+2025-07-16 17:38:31,813 - INFO - Snyk report generated: decompiled_app/joey1_snyk_scan.md
+2025-07-16 17:38:31,813 - INFO - Decompilation completed successfully in 55.71 seconds
+2025-07-16 17:43:35,280 - INFO - Starting decompilation of: /Users/prime/Apps/joey1.apk
+2025-07-16 17:43:35,281 - INFO - Output directory: decompiled_app
+2025-07-16 17:43:54,024 - INFO - Starting Snyk code scan of: decompiled_app/jadx_output/sources
+2025-07-16 17:43:57,180 - INFO - Running Snyk command: snyk code test --json
+2025-07-16 17:48:57,192 - INFO - Decompilation completed successfully in 321.91 seconds
+2025-07-16 17:50:27,243 - INFO - Starting decompilation of: /Users/prime/Apps/joey1.apk
+2025-07-16 17:50:27,243 - INFO - Output directory: test_snyk_fix
+2025-07-16 17:50:48,325 - WARNING - Skipping Snyk scan due to large codebase (2473 Java files). Run manually if needed.
+2025-07-16 17:50:48,326 - INFO - Decompilation completed successfully in 21.08 seconds
+2025-07-16 18:55:38,064 - INFO - Starting decompilation of: /Users/prime/Apps/joey1.apk
+2025-07-16 18:55:38,064 - INFO - Output directory: decompiled_app
+2025-07-16 18:56:05,524 - INFO - Starting Snyk code scan of: decompiled_app/jadx_output/sources
+2025-07-16 18:56:09,218 - INFO - Running Snyk command: snyk code test --json
+2025-07-16 18:56:09,218 - INFO - Scanning directory: decompiled_app/jadx_output/sources
+2025-07-16 18:56:09,218 - INFO - This may take several minutes for large codebases...
+2025-07-16 18:56:24,708 - INFO - Snyk report generated: decompiled_app/joey1_snyk_scan.md
+2025-07-16 18:56:24,709 - INFO - Decompilation completed successfully in 46.64 seconds
+2025-07-16 18:58:09,785 - INFO - Running Snyk security scan on: test_snyk_fix
+2025-07-16 18:58:09,786 - INFO - Starting Snyk code scan of: test_snyk_fix/jadx_output/sources
+2025-07-16 18:58:13,037 - INFO - Running Snyk command: snyk code test --json
+2025-07-16 18:58:13,038 - INFO - Scanning directory: test_snyk_fix/jadx_output/sources
+2025-07-16 18:58:13,038 - INFO - This may take several minutes for large codebases...
+2025-07-16 18:58:51,483 - INFO - Snyk report generated: test_snyk_fix/joey1_snyk_scan.md
+2025-07-16 18:58:51,483 - INFO - Snyk scan completed successfully!
+2025-07-16 19:02:25,875 - ERROR - Directory not found: test_snyk_fix
+2025-07-16 19:02:37,697 - ERROR - Directory not found: test_snyk_fix
+2025-07-16 19:02:45,230 - INFO - Starting decompilation of: /Users/prime/Apps/joey1.apk
+2025-07-16 19:02:45,230 - INFO - Output directory: test_vulnerabilities
+2025-07-16 19:03:08,172 - INFO - Starting Snyk code scan of: test_vulnerabilities/jadx_output/sources
+2025-07-16 19:03:11,591 - INFO - Running Snyk command: snyk code test --json --severity-threshold=low --all-projects --detection-depth=10
+2025-07-16 19:03:11,591 - INFO - Scanning directory: test_vulnerabilities/jadx_output/sources
+2025-07-16 19:03:11,591 - INFO - This may take several minutes for large codebases...
+2025-07-16 19:03:42,935 - INFO - Found 0 vulnerabilities in JSON output
+2025-07-16 19:03:42,936 - INFO - No vulnerabilities found, trying basic scan...
+2025-07-16 19:04:00,055 - INFO - Found 7 vulnerabilities in basic scan
+2025-07-16 19:04:00,058 - INFO - Snyk report generated: test_vulnerabilities/joey1_snyk_scan.md
+2025-07-16 19:04:00,059 - INFO - Decompilation completed successfully in 74.83 seconds
+2025-07-16 19:04:19,297 - INFO - Running Snyk security scan on: test_vulnerabilities
+2025-07-16 19:04:19,298 - INFO - Starting Snyk code scan of: test_vulnerabilities/jadx_output/sources
+2025-07-16 19:04:22,589 - INFO - Running Snyk command: snyk code test --json --severity-threshold=low --all-projects --detection-depth=10
+2025-07-16 19:04:22,589 - INFO - Scanning directory: test_vulnerabilities/jadx_output/sources
+2025-07-16 19:04:22,589 - INFO - This may take several minutes for large codebases...
+2025-07-16 19:04:38,012 - INFO - Found 0 vulnerabilities in JSON output
+2025-07-16 19:04:38,013 - INFO - No vulnerabilities found, trying basic scan...
+2025-07-16 19:04:53,984 - INFO - Found 7 vulnerabilities in basic scan
+2025-07-16 19:04:53,986 - INFO - Snyk report generated: test_vulnerabilities/joey1_snyk_scan.md
+2025-07-16 19:04:53,986 - INFO - Snyk scan completed successfully!
+2025-07-16 19:05:18,326 - ERROR - Directory not found: test_snyk_fix
+2025-07-16 19:05:22,378 - INFO - Starting decompilation of: /Users/prime/Apps/joey1.apk
+2025-07-16 19:05:22,378 - INFO - Output directory: decompiled_app
+2025-07-16 19:05:46,754 - INFO - Starting Snyk code scan of: decompiled_app/jadx_output/sources
+2025-07-16 19:05:50,169 - INFO - Running Snyk command: snyk code test --json --severity-threshold=low --all-projects --detection-depth=10
+2025-07-16 19:05:50,169 - INFO - Scanning directory: decompiled_app/jadx_output/sources
+2025-07-16 19:05:50,169 - INFO - This may take several minutes for large codebases...
+2025-07-16 19:06:15,019 - INFO - Found 0 vulnerabilities in JSON output
+2025-07-16 19:06:15,020 - INFO - No vulnerabilities found, trying basic scan...
+2025-07-16 19:06:31,302 - INFO - Found 7 vulnerabilities in basic scan
+2025-07-16 19:06:31,303 - INFO - Snyk report generated: decompiled_app/joey1_snyk_scan.md
+2025-07-16 19:06:31,304 - INFO - Decompilation completed successfully in 68.92 seconds

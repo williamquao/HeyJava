@@ -9,6 +9,7 @@ A comprehensive command-line tool for decompiling APK files and extracting Java 
 - 🔧 **Smali Code Extraction**: Extract low-level Smali code using apktool
 - 📦 **JAR Conversion**: Convert APK to JAR format using dex2jar
 - 📊 **Code Analysis**: Analyze decompiled code structure, package organization, and statistics
+- 🔒 **Security Scanning**: Integrated Snyk security scanning for vulnerability detection
 - 🛠️ **Multiple Output Formats**: JSON and human-readable text output
 - ⚡ **Modular Extraction**: Extract specific components (Java only, Smali only, resources, manifest)
 
@@ -16,6 +17,7 @@ A comprehensive command-line tool for decompiling APK files and extracting Java 
 
 - Python 3.7+
 - Java 8 or higher (required for decompilation tools)
+- Node.js and npm (required for Snyk security scanning)
 - Internet connection (for tool installation)
 
 ## Installation
@@ -48,6 +50,14 @@ This will install:
 - **dex2jar**: For converting APK to JAR format
 
 **Note**: The installation script requires sudo privileges to install tools to `/usr/local/bin/`.
+
+### 4. Install Snyk (Optional but Recommended)
+
+For security scanning functionality:
+
+```bash
+npm install -g snyk
+```
 
 ### 4. Verify Installation
 

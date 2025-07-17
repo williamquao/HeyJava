@@ -53,6 +53,8 @@ class APKDecompilerCLI:
                 self.analyze_command(args)
             elif args.command == 'install-tools':
                 self.install_tools_command(args)
+            elif args.command == 'snyk-scan':
+                self.snyk_scan_command(args)
             else:
                 parser.print_help()
                 
@@ -120,6 +122,12 @@ Examples:
         # Install tools command
         install_parser = subparsers.add_parser('install-tools', help='Install required tools')
         install_parser.add_argument('--force', action='store_true', help='Force reinstall tools')
+        
+        # Snyk scan command
+        snyk_parser = subparsers.add_parser('snyk-scan', help='Scan decompiled code with Snyk')
+        snyk_parser.add_argument('directory', help='Directory with decompiled code')
+        snyk_parser.add_argument('--apk-name', help='Original APK name for report naming')
+        snyk_parser.add_argument('--format', choices=['json', 'text'], default='text', help='Output format')
         
         # Global options
         parser.add_argument('-v', '--verbose', action='store_true', help='Enable verbose output')
@@ -223,6 +231,35 @@ Examples:
         """Handle install tools command."""
         self.logger.info("Installing required tools...")
         self.install_required_tools(args.force)
+    
+    def snyk_scan_command(self, args):
+        """Handle Snyk scan command."""
+        directory = Path(args.directory)
+        
+        if not directory.exists():
+            self.logger.error(f"Directory not found: {directory}")
+            sys.exit(1)
+        
+        self.logger.info(f"Running Snyk security scan on: {directory}")
+        
+        # Generate output filename
+        apk_name = args.apk_name if args.apk_name else directory.name
+        snyk_report_file = directory / f"{apk_name}_snyk_scan.md"
+        
+        # Run Snyk scan
+        jadx_dir = directory / 'jadx_output' / 'sources'
+        if not jadx_dir.exists():
+            self.logger.error("No jadx_output/sources directory found. Please decompile the APK first.")
+            sys.exit(1)
+        
+        result = self.decompiler.snyk_scanner.scan_java_code(str(jadx_dir), str(snyk_report_file))
+        
+        if result['success']:
+            self.logger.info(f"Snyk scan completed successfully!")
+            self.print_snyk_results(result, args.format)
+        else:
+            self.logger.error(f"Snyk scan failed: {result.get('error', 'Unknown error')}")
+            sys.exit(1)
     
     def extract_java_only(self, apk_path: Path, output_dir: Path):
         """Extract only Java code using jadx."""
@@ -409,6 +446,18 @@ Examples:
                     if len(analysis['package_structure']) > 5:
                         print(f"     ... and {len(analysis['package_structure']) - 5} more packages")
             
+            # Snyk Security Scan
+            if 'snyk_scan' in result:
+                snyk = result['snyk_scan']
+                print(f"\n🔒 Security Scan (Snyk):")
+                if snyk.get('success'):
+                    print(f"   Status: ✅ Completed")
+                    print(f"   Vulnerabilities: {snyk.get('vulnerability_count', 0)}")
+                    print(f"   Report: {snyk.get('output_file', 'N/A')}")
+                else:
+                    print(f"   Status: ❌ Failed")
+                    print(f"   Error: {snyk.get('error', 'Unknown error')}")
+            
             print(f"\n📁 Output Directory: {result.get('output_directory', 'N/A')}")
             print("="*60)
     
@@ -474,6 +523,48 @@ Examples:
                 sorted_files = sorted(analysis['java_files'], key=lambda x: x['lines'], reverse=True)
                 for file_info in sorted_files[:5]:
                     print(f"   {file_info['path']}: {file_info['lines']} lines")
+            
+            print("="*50)
+    
+    def print_snyk_results(self, result: Dict, format_type: str):
+        """Print Snyk scan results in specified format."""
+        if format_type == 'json':
+            print(json.dumps(result, indent=2))
+        else:
+            print("\n" + "="*50)
+            print("SNYK SECURITY SCAN RESULTS")
+            print("="*50)
+            
+            vulnerabilities = result.get('vulnerabilities', [])
+            print(f"🔒 Total Vulnerabilities: {len(vulnerabilities)}")
+            
+            if vulnerabilities:
+                high_count = len([v for v in vulnerabilities if v.get('severity', '').lower() == 'high'])
+                medium_count = len([v for v in vulnerabilities if v.get('severity', '').lower() == 'medium'])
+                low_count = len([v for v in vulnerabilities if v.get('severity', '').lower() == 'low'])
+                
+                print(f"   🔴 High: {high_count}")
+                print(f"   🟡 Medium: {medium_count}")
+                print(f"   🟢 Low: {low_count}")
+                
+                print(f"\n📄 Report saved to: {result.get('output_file', 'N/A')}")
+                
+                # Show top vulnerabilities
+                print(f"\n🚨 Top Vulnerabilities:")
+                for i, vuln in enumerate(vulnerabilities[:5], 1):
+                    severity = vuln.get('severity', 'Unknown').upper()
+                    title = vuln.get('title', 'Unknown')
+                    file_path = vuln.get('from', ['Unknown'])[0] if vuln.get('from') else 'Unknown'
+                    line = vuln.get('lineNumber', 'N/A')
+                    
+                    print(f"   {i}. [{severity}] {title}")
+                    print(f"      📁 {file_path}:{line}")
+                
+                if len(vulnerabilities) > 5:
+                    print(f"      ... and {len(vulnerabilities) - 5} more vulnerabilities")
+            else:
+                print("✅ No vulnerabilities found!")
+                print(f"\n📄 Report saved to: {result.get('output_file', 'N/A')}")
             
             print("="*50)
 
